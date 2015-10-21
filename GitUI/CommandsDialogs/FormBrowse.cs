@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using ConsoleControl;
 using GitCommands;
 using GitCommands.Repository;
 using GitCommands.Utils;
@@ -168,9 +169,11 @@ namespace GitUI.CommandsDialogs
                 imageList.Images.Add(global::GitUI.Properties.Resources.IconCommit);
                 imageList.Images.Add(global::GitUI.Properties.Resources.IconFileTree);
                 imageList.Images.Add(global::GitUI.Properties.Resources.IconDiff);
+                imageList.Images.Add(global::GitUI.Properties.Resources.bash);
                 CommitInfoTabControl.TabPages[0].ImageIndex = 0;
                 CommitInfoTabControl.TabPages[1].ImageIndex = 1;
                 CommitInfoTabControl.TabPages[2].ImageIndex = 2;
+                CommitInfoTabControl.TabPages[3].ImageIndex = 3;
             }
 
             RevisionGrid.UICommandsSource = this;
@@ -1701,6 +1704,17 @@ namespace GitUI.CommandsDialogs
             FillDiff();
             FillCommitInfo();
             FillBuildReport();
+            FillCmd();
+        }
+
+        private void FillCmd()
+        {
+            if (CommitInfoTabControl.SelectedTab != CmdTabPage)
+            {
+                return;
+            }
+
+            ConsoleControl.Focus();
         }
 
         private void DiffFilesSelectedIndexChanged(object sender, EventArgs e)
@@ -3078,6 +3092,7 @@ namespace GitUI.CommandsDialogs
         }
 
         private CancellationTokenSource _submodulesStatusImagesCTS = new CancellationTokenSource();
+        private IDisposable observable;
 
         private static Image GetItemImage(GitSubmoduleStatus gitSubmoduleStatus)
         {
@@ -3370,6 +3385,8 @@ namespace GitUI.CommandsDialogs
 
                 if (components != null)
                     components.Dispose();
+                if(observable != null)
+                    observable.Dispose();
             }
             base.Dispose(disposing);
         }

@@ -1,4 +1,7 @@
+using System;
 using System.Windows.Forms;
+using System.Reactive.Linq;
+using ConsoleControl;
 using GitUI.Editor;
 
 namespace GitUI.CommandsDialogs
@@ -61,6 +64,8 @@ namespace GitUI.CommandsDialogs
             this.CommitInfoTabPage = new System.Windows.Forms.TabPage();
             this.RevisionInfo = new GitUI.CommitInfo.CommitInfo();
             this.TreeTabPage = new System.Windows.Forms.TabPage();
+            this.CmdTabPage = new System.Windows.Forms.TabPage();
+            this.ConsoleControl = new ConsoleControl.ConsoleControl();
             this.FileTreeSplitContainer = new System.Windows.Forms.SplitContainer();
             this.GitTree = new System.Windows.Forms.TreeView();
             this.FileTreeContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -641,6 +646,7 @@ namespace GitUI.CommandsDialogs
             this.CommitInfoTabControl.Controls.Add(this.CommitInfoTabPage);
             this.CommitInfoTabControl.Controls.Add(this.TreeTabPage);
             this.CommitInfoTabControl.Controls.Add(this.DiffTabPage);
+            this.CommitInfoTabControl.Controls.Add(this.CmdTabPage);
             this.CommitInfoTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.CommitInfoTabControl.Location = new System.Drawing.Point(0, 0);
             this.CommitInfoTabControl.Margin = new System.Windows.Forms.Padding(4);
@@ -649,6 +655,43 @@ namespace GitUI.CommandsDialogs
             this.CommitInfoTabControl.Size = new System.Drawing.Size(1154, 365);
             this.CommitInfoTabControl.TabIndex = 0;
             this.CommitInfoTabControl.SelectedIndexChanged += new System.EventHandler(this.TabControl1SelectedIndexChanged);
+
+            this.CmdTabPage.Controls.Add(this.ConsoleControl);
+            this.CmdTabPage.Location = new System.Drawing.Point(4, 29);
+            this.CmdTabPage.Margin = new System.Windows.Forms.Padding(19);
+            this.CmdTabPage.Name = "CmdTabPage";
+            this.CmdTabPage.Size = new System.Drawing.Size(1146, 332);
+            this.CmdTabPage.TabIndex = 3;
+            this.CmdTabPage.Text = "Cmd";
+            this.CmdTabPage.UseVisualStyleBackColor = true;
+
+            this.ConsoleControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ConsoleControl.IsInputEnabled = true;
+            this.ConsoleControl.Location = new System.Drawing.Point(0, 0);
+            this.ConsoleControl.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.ConsoleControl.Name = "consoleControl";
+            this.ConsoleControl.SendKeyboardCommandsToProcess = false;
+            this.ConsoleControl.ShowDiagnostics = false;
+            this.ConsoleControl.Size = new System.Drawing.Size(784, 524);
+            this.ConsoleControl.TabIndex = 0;
+            this.ConsoleControl.SendKeyboardCommandsToProcess = true;
+      
+            this.ConsoleControl.Load += (sender, args) =>
+            {
+                this.ConsoleControl.StartProcess("cmd", null);
+                this.ConsoleControl.WriteInput("cd " + this.Module.WorkingDir, DefaultForeColor, true);
+                this.ConsoleControl.IsInputEnabled = true;
+            };
+
+            this.observable = 
+                Observable.FromEventPattern<ConsoleEventHandler, ConsoleEventArgs>
+                (ev => this.ConsoleControl.OnConsoleOutput += ev, ev => this.ConsoleControl.OnConsoleOutput -= ev)
+                .Throttle(TimeSpan.FromMilliseconds(250))
+                .Subscribe(_ =>
+                {
+                    if (UICommands != null) UICommands.RepoChangedNotifier.Notify();
+                });
+            
             // 
             // CommitInfoTabPage
             // 
@@ -2040,10 +2083,12 @@ namespace GitUI.CommandsDialogs
         private System.Windows.Forms.SplitContainer MainSplitContainer;
         private System.Windows.Forms.TabControl CommitInfoTabControl;
         private System.Windows.Forms.TabPage TreeTabPage;
+        private TabPage CmdTabPage;
         private System.Windows.Forms.BindingSource gitRevisionBindingSource;
         private System.Windows.Forms.BindingSource gitItemBindingSource;
         private GitUI.RevisionGrid RevisionGrid;
         private System.Windows.Forms.SplitContainer FileTreeSplitContainer;
+        private ConsoleControl.ConsoleControl ConsoleControl;
         private ToolStripEx ToolStrip;
         private System.Windows.Forms.ToolStripButton toolStripButton1;
         private System.Windows.Forms.ToolStripSplitButton _NO_TRANSLATE_Workingdir;

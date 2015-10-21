@@ -631,7 +631,7 @@ namespace GitUI
             Revisions.Rows[index].Selected = true;
             Revisions.CurrentCell = Revisions.Rows[index].Cells[1];
 
-            Revisions.Select();
+         //   Revisions.Select();
         }
 
         // Selects row cotaining revision given its revisionId
@@ -1273,7 +1273,7 @@ namespace GitUI
             Revisions.SelectionChanged -= RevisionsSelectionChanged;
 
             Revisions.Enabled = true;
-            Revisions.Focus();
+       //     Revisions.Focus();
             Revisions.SelectionChanged += RevisionsSelectionChanged;
 
             Revisions.ResumeLayout();

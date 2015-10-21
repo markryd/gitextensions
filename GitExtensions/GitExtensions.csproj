@@ -61,6 +61,14 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ConsoleControl, Version=1.1.0.0, Culture=neutral, PublicKeyToken=7edd23586f5e297f, processorArchitecture=MSIL">
+      <HintPath>..\packages\ConsoleControl.1.1.0.0\lib\net40\ConsoleControl.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ConsoleControlAPI, Version=1.1.0.0, Culture=neutral, PublicKeyToken=7c86b8a36b9c33e2, processorArchitecture=MSIL">
+      <HintPath>..\packages\ConsoleControl.1.1.0.0\lib\net40\ConsoleControlAPI.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="SmartFormat, Version=1.6.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SmartFormat.NET.1.6.1.0\lib\net40-Client\SmartFormat.dll</HintPath>
       <Private>True</Private>
@@ -141,6 +149,10 @@
       <Project>{F261BCD1-F5F7-4664-A230-E52032E6E9FD}</Project>
       <Name>BackgroundFetch</Name>
       <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Plugins\CmdWindow\CmdWindow.csproj">
+      <Project>{247ef85b-5e27-4b54-b5e9-16b60452abc2}</Project>
+      <Name>CmdWindow</Name>
     </ProjectReference>
     <ProjectReference Include="..\Plugins\CreateLocalBranches\CreateLocalBranches.csproj">
       <Project>{31D96116-16A6-45C2-9A6D-6DD5A1FC5F20}</Project>
