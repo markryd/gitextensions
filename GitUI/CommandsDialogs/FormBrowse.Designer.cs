@@ -661,7 +661,7 @@ namespace GitUI.CommandsDialogs
             this.CmdTabPage.Name = "CmdTabPage";
             this.CmdTabPage.Size = new System.Drawing.Size(1146, 332);
             this.CmdTabPage.TabIndex = 3;
-            this.CmdTabPage.Text = "Cmd";
+            this.CmdTabPage.Text = "Git Bash";
             this.CmdTabPage.UseVisualStyleBackColor = true;
 
             this.ConsoleControl.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -677,8 +677,12 @@ namespace GitUI.CommandsDialogs
       
             this.ConsoleControl.Load += (sender, args) =>
             {
-                this.ConsoleControl.StartProcess("cmd", null);
-                this.ConsoleControl.WriteInput("cd " + this.Module.WorkingDir, DefaultForeColor, true);
+                var bashargs = "--login -i\"";
+                string termCmd = System.IO.File.Exists(GitCommands.AppSettings.GitBinDir + "bash.exe") ? "bash" : "sh";
+                var cmdargs = string.Format("/c \"\"{0}{1}\" {2}", GitCommands.AppSettings.GitBinDir, termCmd, bashargs);
+
+                this.ConsoleControl.StartProcess("cmd", cmdargs, this.Module.WorkingDir);
+                //this.ConsoleControl.WriteInput("cd " + this.Module.WorkingDir, DefaultForeColor, true);
                 this.ConsoleControl.IsInputEnabled = true;
             };
 
