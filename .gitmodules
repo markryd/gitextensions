@@ -7,3 +7,6 @@
 [submodule "Externals/Git.hub"]
 	path = Externals/Git.hub
 	url = git://github.com/gitextensions/Git.hub.git
+[submodule "Lib/ConsoleControl"]
+	path = Lib/ConsoleControl
+	url = git@github.com:markryd/consolecontrol.git
