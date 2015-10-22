@@ -1,7 +1,6 @@
 using System;
 using System.Windows.Forms;
 using System.Reactive.Linq;
-using ConsoleControl;
 using GitUI.Editor;
 
 namespace GitUI.CommandsDialogs
@@ -684,7 +683,7 @@ namespace GitUI.CommandsDialogs
             };
 
             this.observable = 
-                Observable.FromEventPattern<ConsoleEventHandler, ConsoleEventArgs>
+                Observable.FromEventPattern<ConsoleControl.ConsoleEventHandler, ConsoleControl.ConsoleEventArgs>
                 (ev => this.ConsoleControl.OnConsoleOutput += ev, ev => this.ConsoleControl.OnConsoleOutput -= ev)
                 .Throttle(TimeSpan.FromMilliseconds(250))
                 .Subscribe(_ =>

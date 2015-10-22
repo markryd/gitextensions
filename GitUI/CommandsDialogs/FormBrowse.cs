@@ -12,7 +12,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using ConsoleControl;
 using GitCommands;
 using GitCommands.Repository;
 using GitCommands.Utils;
